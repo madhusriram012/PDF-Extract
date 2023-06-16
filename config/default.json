@@ -1,0 +1,14 @@
+{
+  "throttle": {
+    "maxRequestsPerInterval": 20,
+    "intervalInSeconds": 80000
+  },
+  "folderInfo" : {
+    "outputPath" : "output"
+  },
+  "adobeClientConfig" : {
+    "connectTimeout" : 30000,
+    "readTimeout": 30000,
+    "credentialsFilePath" : "./pdfservices-api-credentials.json"
+  }
+}

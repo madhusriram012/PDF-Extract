@@ -60,7 +60,7 @@ Initially you can see the output inside the output folder but in order to see yo
 ```bash
 node index.js
 ```
-we will get the output as combined-text.csv file inside the output folder.
+we will get the output as combined_data.csv file inside the output folder.
 
 
 ## Assumptions

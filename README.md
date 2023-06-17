@@ -52,7 +52,7 @@ npm install
 
 ### Step 3: 
 
-Delete the existing private.key and pdfservice-api-credentials.json file and add your own in place of it by getting it from https://developer.adobe.com/document-services/apis/pdf-extract/ .
+## Delete the existing private.key and pdfservice-api-credentials.json file and add your own in place of it by getting it from https://developer.adobe.com/document-services/apis/pdf-extract/ .
 
 
 ### Step 4:

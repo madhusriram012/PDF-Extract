@@ -31,25 +31,25 @@ class CsvService {
         const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
         invoiceBillDetailsExtractor.findDetails(elements)
 // 
-        // const csvData = data.elements.reduce((acc, element, index) => {
-        //     acc[`Text${index + 1}`] = element.Text;
-        //     return acc;
-        // }, {});
+        const csvData = data.elements.reduce((acc, element, index) => {
+            acc[`Text${index + 1}`] = element.Text;
+            return acc;
+        }, {});
 
-        // csvData.Path = this.inputPdf;
+        csvData.Path = this.inputPdf;
 
-        // const csvWriterOptions = {
-        //     path: `${this.inputFolder}/combined_data.csv`,
-        //     header: [
-        //         { id: "Path", title: "Path" },
-        //         ...data.elements.map((_, index) => ({ id: `Text${index + 1}`, title: `Text${index + 1}` }))
-        //     ],
-        //     append: true
-        // };
+        const csvWriterOptions = {
+            path: `${this.inputFolder}/combined_data.csv`,
+            header: [
+                { id: "Path", title: "Path" },
+                ...data.elements.map((_, index) => ({ id: `Text${index + 1}`, title: `Text${index + 1}` }))
+            ],
+            append: true
+        };
 
-        // const writer = csvWriter(csvWriterOptions);
-        // await writer.writeRecords([csvData]);
-        // console.log(`Successfully written information from ${this.inputPdf}.`);
+        const writer = csvWriter(csvWriterOptions);
+        await writer.writeRecords([csvData]);
+        console.log(`Successfully written information from ${this.inputPdf}.`);
         // 
     }
 

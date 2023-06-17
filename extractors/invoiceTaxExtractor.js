@@ -6,7 +6,7 @@ class InvoiceTaxExtractor {
         const helper = new Helper()
         const detailsElements = helper.findSimilarTopBoundElements(elements, 485.92999267578125)
         const details = this.getTaxDetails(detailsElements)
-        console.log(details)
+        // console.log(details)
     }
 
     getTaxDetails = (elements) => {

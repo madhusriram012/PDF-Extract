@@ -10,15 +10,15 @@ const OUTPUT_FOLDER = config.get('folderInfo.outputPath');
 const throttle = throttledQueue(maxRequestsPerInterval, intervalInSeconds);
 const processAllPDFs = async () => {
     // 
-    // const adobeExecutionContext = Adobe.getAdobeExecutionContext()
+    const adobeExecutionContext = Adobe.getAdobeExecutionContext()
     // 
     const inputs = getInputPdfs()
     // 
-    // await Promise.all(inputs.map((input, index) => throttle(() => {
-    //     console.log('The promise has resolved ' + index);
-    //     const extractPdfService = new ExtractPdfService(input, adobeExecutionContext, OUTPUT_FOLDER)
-    //     return extractPdfService.extractAndSavePdf()
-    // })))
+    await Promise.all(inputs.map((input, index) => throttle(() => {
+        console.log('The promise has resolved ' + index);
+        const extractPdfService = new ExtractPdfService(input, adobeExecutionContext, OUTPUT_FOLDER)
+        return extractPdfService.extractAndSavePdf()
+    })))
 // 
     inputs.map((input) => {
         const csvService = new CsvService(input, OUTPUT_FOLDER)
@@ -28,7 +28,7 @@ const processAllPDFs = async () => {
 
 const getInputPdfs = () => {
     const inputPdfs = [];
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 100; i++) {
         inputPdfs.push(`TestDataSet/output${i}.pdf`);
     }
     return inputPdfs

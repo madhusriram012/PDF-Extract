@@ -8,30 +8,62 @@ class BillingAddressExtractor {
         // Kerry Bergnaum Kerry_Bergnaum@yahoo.c om 189-052-5595 // TODO it won't work for the scenario where all the data in single line (e.g. output5.zip)
         const index = helper.findIndexOfTheTextContains(elements, "BILL TO") //TODO if index not found
         const billingAddressElements = helper.findSimilarTopBoundElements(elements, elements[index].Bounds[0])
-        //console.log(billingAddressElements)
+        // console.log(billingAddressElements)
         const email = this.findEmailAddress(billingAddressElements)
         const phoneNumber = this.findPhoneNumber(billingAddressElements)
         console.log(email)
         console.log(phoneNumber)
     }
-
-    findEmailAddress = (elements) => {
-        const index = _.findIndex(elements, function (o) {
-            return o.Text && validator.isEmail(o.Text.trim())
-        });
-        if(index === -1)
-            return ''
-        return elements[index].Text.trim()
-    }
+  
+    // findEmailAddress = (elements) => {
+    //     const emailElement = elements.find((o) => {
+    //       return o.Text && validator.isEmail(o.Text.trim());
+    //     });
+      
+    //     if (emailElement) {
+    //       return emailElement.Text.trim();
+    //     }
+      
+    //     return '';
+    //   };
+     findEmailAddress = (elements) => {
+      const emails = [];
+      let currentEmail = "";
+    
+      for (const element of elements) {
+        if (element.Text) {
+          const normalizedText = element.Text.trim();
+    
+          if (validator.isEmail(normalizedText)) {
+            // Valid email address found
+            const normalizedEmail = normalizeEmail(normalizedText);
+            currentEmail += normalizedEmail;
+          } else {
+            // Not a valid email address, assuming broken part of an email
+            currentEmail += normalizedText;
+          }
+    
+          if (currentEmail && validator.isEmail(currentEmail)) {
+            emails.push(currentEmail);
+            currentEmail = "";
+          }
+        }
+      }
+    
+      return emails;
+    };
+    
+    
 
     findPhoneNumber = (elements) => {
-        const index = _.findIndex(elements, function (o) {
-            return o.Text && (/^\d+$/.test(o.Text.trim().replaceAll("-", "")))
-        });
-        if(index === -1)
-            return ''
-        return elements[index].Text.trim()
-    }
+        for (let i = 0; i < elements.length; i++) {
+          const text = elements[i].Text.trim().replace(/-/g, '');
+          if (text && /^\d+$/.test(text)) {
+            return text;
+          }
+        }
+        return '';
+      };
 }
 
 module.exports = BillingAddressExtractor

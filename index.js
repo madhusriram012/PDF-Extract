@@ -9,14 +9,17 @@ const intervalInSeconds = config.get('throttle.intervalInSeconds');
 const OUTPUT_FOLDER = config.get('folderInfo.outputPath');
 const throttle = throttledQueue(maxRequestsPerInterval, intervalInSeconds);
 const processAllPDFs = async () => {
+    // 
     // const adobeExecutionContext = Adobe.getAdobeExecutionContext()
+    // 
     const inputs = getInputPdfs()
+    // 
     // await Promise.all(inputs.map((input, index) => throttle(() => {
     //     console.log('The promise has resolved ' + index);
     //     const extractPdfService = new ExtractPdfService(input, adobeExecutionContext, OUTPUT_FOLDER)
     //     return extractPdfService.extractAndSavePdf()
     // })))
-
+// 
     inputs.map((input) => {
         const csvService = new CsvService(input, OUTPUT_FOLDER)
         csvService.writeToCsv()

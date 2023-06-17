@@ -56,7 +56,7 @@ npm install
 
 
 ### Step 4:
-Initially you can see the output inside the output folder but in order to see yourself just remove the contents inside the output folder and run,
+Initially you can see the output inside the output folder but in order to see yourself just delete the contents inside the output folder (ie., TestdataSet which is inside output folder and the combined_data.csv) and run,
 ```bash
 node index.js
 ```

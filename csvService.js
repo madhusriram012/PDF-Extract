@@ -25,14 +25,15 @@ class CsvService {
         console.log(this.inputPdf)
         const billingAddressExtractor = new BillingAddressExtractor()
         billingAddressExtractor.findBillingAddress(elements)
-        //const detailsExtractor = new DetailsExtractor()
-        //detailsExtractor.findDetails(elements)
-        //const invoiceTaxExtractor = new InvoiceTaxExtractor()
-        //invoiceTaxExtractor.findPaymentDetails(elements)
-        //const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
-       // invoiceBillDetailsExtractor.findDetails(elements)
+        // 
+        const detailsExtractor = new DetailsExtractor()
+        detailsExtractor.findDetails(elements)
+        const invoiceTaxExtractor = new InvoiceTaxExtractor()
+        invoiceTaxExtractor.findPaymentDetails(elements)
+        const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
+       invoiceBillDetailsExtractor.findDetails(elements)
 
-        /*const csvData = data.elements.reduce((acc, element, index) => {
+        const csvData = data.elements.reduce((acc, element, index) => {
             acc[`Text${index + 1}`] = element.Text;
             return acc;
         }, {});
@@ -49,8 +50,9 @@ class CsvService {
         };
 
         const writer = csvWriter(csvWriterOptions);
-        await writer.writeRecords([csvData]);*/
-        //console.log(`Successfully written information from ${this.inputPdf}.`);
+        await writer.writeRecords([csvData]);
+        console.log(`Successfully written information from ${this.inputPdf}.`);
+        // 
     }
 
 }

@@ -1,62 +1,72 @@
 const validator = require("validator");
-const Helper = require('../helper/helper.js');
+const Helper = require('../helper/helper.js')
 
 class BillingAddressExtractor {
-  findBillingAddress = (elements) => {
-    try {
-      const helper = new Helper();
-      const index = helper.findIndexOfTheTextContains(elements, "BILL TO");
+    findBillingAddress = (elements) => {
 
-      if (index === -1) {
-        throw new Error("Index not found");
-      }
-
-      const billingAddressElements = helper.findSimilarTopBoundElements(elements, elements[index].Bounds[0]);
-      const addressString = billingAddressElements.map(({ Text }) => Text).join('').replace("BILL TO", "").trim();
-      console.log(addressString);
-
-      const [name, email, phoneNumber] = this.extractAddressDetails(addressString);
-
-      console.log("Name:", name);
-      console.log("Email:", email);
-      console.log("Phone Number:", phoneNumber);
-
-      // Process the address remaining idx
-    } catch (error) {
-      console.error("Error in getting address:", error);
-    }
-  };
-
-  extractAddressDetails = (addressString) => {
-    const splitAddressString = addressString.split(/\s+/);
-
-    const name = `${splitAddressString[0]} ${splitAddressString[1]}`;
-    const email = this.getEmailAddress(splitAddressString);
-    const phoneNumber = this.getPhoneNumber(splitAddressString);
-
-    return [name, email, phoneNumber];
-  };
-
-  getEmailAddress = (splitAddressString) => {
-    for (let i = 0; i < splitAddressString.length; i++) {
-      const currentString = splitAddressString[i];
-      if (validator.isEmail(currentString)) {
-        return currentString;
+        const helper = new Helper()
+        const index = helper.findIndexOfTheTextContains(elements, "BILL TO") //TODO if index not found
+        const billingAddressElements = helper.findSimilarTopBoundElements(elements, elements[index].Bounds[0])
+        const arr = billingAddressElements
+            .map((_, i) => billingAddressElements[i].Text);
+        const addressString = arr.join('').replace("BILL TO", "").trim();
+        console.log(addressString)
+        const splitAddressString = addressString.split(" ")
+        if (splitAddressString.length > 0) { //assumption is the address present
+          try {
+              const name = splitAddressString[0] + " " + splitAddressString[1] //firstname + lastname
+              const emailAddress = this.getEmailAddress(splitAddressString[2], splitAddressString[3])
+              const phoneNumber = this.getPhoneNumber(splitAddressString[3], splitAddressString[4])
+              const idx = this.getIndexOfPhoneNumber(splitAddressString[3], 3, splitAddressString[4], 4)
+              const addressLine1 = splitAddressString.slice(idx + 1, splitAddressString.length - 1).join(" ")
+              const addressLine2 = splitAddressString[splitAddressString.length - 1]
+              return {
+                  name : name,
+                  emailAddress: emailAddress,
+                  phoneNumber: phoneNumber,
+                  addressLine1: addressLine1,
+                  addressLine2: addressLine2
+              }
+          } catch (e) {
+              console.log(" Error in getting address")
+          }
       }
     }
-    return '';
-  };
 
-  getPhoneNumber = (splitAddressString) => {
-    for (let i = 0; i < splitAddressString.length; i++) {
-      const currentString = splitAddressString[i];
-      const phoneNumber = currentString.replace(/[^0-9]/g, ''); // Remove non-digit characters
-      if (phoneNumber.length >= 10) { // Assuming phone numbers are at least 10 digits long
-        return phoneNumber;
-      }
+    getEmailAddress = (part1, part2) => {
+        if (validator.isEmail(part1 + part2)) {
+            return part1 + part2
+        } else if (validator.isEmail(part1)) {
+            return part1
+        } else return ''
     }
-    return '';
-  };
+
+    getPhoneNumber = (part1, part2) => {
+        const stringWithoutHyphen = part1.trim().replace(/-/g, '');
+        if(this.isLetterPresent(stringWithoutHyphen)) { //contain
+            return part2
+        } else {
+            return part1
+        }
+    }
+
+    getIndexOfPhoneNumber = (part1,index1, part2, index2) => {
+        const stringWithoutHyphen = part1.trim().replace(/-/g, '');
+        if(this.isLetterPresent(stringWithoutHyphen)) { //contain
+            return index2
+        } else {
+            return index1
+        }
+    }
+    isLetterPresent = (string) => {
+        return /[a-z]/i.test(string)
+    }
+
+    constructAddressString = (addressArray, phoneNumber) => {
+      const address = addressArray.filter((item) => item !== phoneNumber).join(' ').trim();
+      return address;
+    };
+
 }
 
-module.exports = BillingAddressExtractor;
+module.exports = BillingAddressExtractor

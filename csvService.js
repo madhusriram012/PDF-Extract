@@ -4,6 +4,7 @@ const BillingAddressExtractor = require('./extractors/billingAddressExtractor.js
 const DetailsExtractor = require('./extractors/detailsExtractor.js')
 const InvoiceTaxExtractor = require('./extractors/invoiceTaxExtractor.js')
 const InvoiceBillDetailsExtractor = require('./extractors/invoiceBillDetailsExtractor.js')
+const _ = require("lodash");
 
 class CsvService {
     inputPdf
@@ -24,14 +25,14 @@ class CsvService {
         console.log(this.inputPdf)
         const billingAddressExtractor = new BillingAddressExtractor()
         billingAddressExtractor.findBillingAddress(elements)
-        const detailsExtractor = new DetailsExtractor()
-        detailsExtractor.findDetails(elements)
-        const invoiceTaxExtractor = new InvoiceTaxExtractor()
-        invoiceTaxExtractor.findPaymentDetails(elements)
-        const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
-        invoiceBillDetailsExtractor.findDetails(elements)
-// 
-        const csvData = data.elements.reduce((acc, element, index) => {
+        //const detailsExtractor = new DetailsExtractor()
+        //detailsExtractor.findDetails(elements)
+        //const invoiceTaxExtractor = new InvoiceTaxExtractor()
+        //invoiceTaxExtractor.findPaymentDetails(elements)
+        //const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
+       // invoiceBillDetailsExtractor.findDetails(elements)
+
+        /*const csvData = data.elements.reduce((acc, element, index) => {
             acc[`Text${index + 1}`] = element.Text;
             return acc;
         }, {});
@@ -48,9 +49,8 @@ class CsvService {
         };
 
         const writer = csvWriter(csvWriterOptions);
-        await writer.writeRecords([csvData]);
-        console.log(`Successfully written information from ${this.inputPdf}.`);
-        // 
+        await writer.writeRecords([csvData]);*/
+        //console.log(`Successfully written information from ${this.inputPdf}.`);
     }
 
 }

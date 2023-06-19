@@ -7,7 +7,7 @@ class DetailsExtractor {
         const index = helper.findIndexOfTheTextContains(elements, "DETAILS") //TODO if index not found
         const detailsElements = helper.findSimilarTopBoundElements(elements, elements[index].Bounds[0])
         const details = this.getDetails(detailsElements)
-        // console.log(details)
+        console.log(details)
     }
 
     getDetails = (elements) => {

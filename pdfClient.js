@@ -10,7 +10,8 @@ class PdfClient {
 
         const options = new PDFServicesSdk.ExtractPDF.options.ExtractPdfOptions.Builder()
             .addElementsToExtract(PDFServicesSdk.ExtractPDF.options.ExtractElementType.TEXT, PDFServicesSdk.ExtractPDF.options.ExtractElementType.TABLES)
-            .addElementsToExtractRenditions(PDFServicesSdk.ExtractPDF.options.ExtractRenditionsElementType.TABLES, PDFServicesSdk.ExtractPDF.options.ExtractRenditionsElementType.FIGURES)
+            .addElementsToExtractRenditions(PDFServicesSdk.ExtractPDF.options.ExtractRenditionsElementType.TABLES)
+            .addTableStructureFormat(PDFServicesSdk.ExtractPDF.options.TableStructureType.CSV)
             .build();
 
         extractPDFOperation.setInput(input);

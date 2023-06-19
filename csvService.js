@@ -1,9 +1,12 @@
 const AdmZip = require("adm-zip");
 const {createObjectCsvWriter: csvWriter} = require("csv-writer");
+const BusinessAddressExtractor = require('./extractors/businessAddressExtractor.js')
 const BillingAddressExtractor = require('./extractors/billingAddressExtractor.js')
 const DetailsExtractor = require('./extractors/detailsExtractor.js')
 const InvoiceTaxExtractor = require('./extractors/invoiceTaxExtractor.js')
-const InvoiceBillDetailsExtractor = require('./extractors/invoiceBillDetailsExtractor.js')
+const InvoiceNumberExtractor = require('./extractors/invoiceNumberExtractor.js')
+const InvoiceIssueDateExtractor = require('./extractors/invoiceIssueDateExtractor.js')
+const InvoiceItemDetailsExtractor = require('./extractors/invoiceItemDetailsExtractor.js')
 const _ = require("lodash");
 
 class CsvService {
@@ -25,14 +28,19 @@ class CsvService {
         console.log(this.inputPdf)
         const billingAddressExtractor = new BillingAddressExtractor()
         billingAddressExtractor.findBillingAddress(elements)
-        // 
+        const businessAddressExtractor = new BusinessAddressExtractor()
+        businessAddressExtractor.findAddress(elements)
+        const invoiceNumberExtractor = new InvoiceNumberExtractor()
+        invoiceNumberExtractor.find(elements)
+        const invoiceIssueDateExtractor = new InvoiceIssueDateExtractor()
+        invoiceIssueDateExtractor.find(elements)
         const detailsExtractor = new DetailsExtractor()
         detailsExtractor.findDetails(elements)
         const invoiceTaxExtractor = new InvoiceTaxExtractor()
         invoiceTaxExtractor.findPaymentDetails(elements)
-        const invoiceBillDetailsExtractor = new InvoiceBillDetailsExtractor()
-       invoiceBillDetailsExtractor.findDetails(elements)
-
+        const invoiceItemDetailsExtractor = new InvoiceItemDetailsExtractor()
+        invoiceItemDetailsExtractor.findDetails(elements)
+//
         const csvData = data.elements.reduce((acc, element, index) => {
             acc[`Text${index + 1}`] = element.Text;
             return acc;
@@ -52,7 +60,7 @@ class CsvService {
         const writer = csvWriter(csvWriterOptions);
         await writer.writeRecords([csvData]);
         console.log(`Successfully written information from ${this.inputPdf}.`);
-        // 
+        //
     }
 
 }
